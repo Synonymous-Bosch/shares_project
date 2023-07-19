@@ -14,7 +14,7 @@ const finnhubClient = new finnhub.DefaultApi();
 
 const AppContainer = styled.div`
   display: flex;
-`;
+  `;
 
 const ContentContainer = styled.div`
   flex: 1;

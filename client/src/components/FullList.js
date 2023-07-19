@@ -18,6 +18,7 @@ const ListContainer = styled.div`
     padding-right: 30px;
   }
 `;
+
 const Label = styled.label`
   display: flex;
   align-items: center;
@@ -67,15 +68,15 @@ const FullList = ({ fullStocks, setStocks, stocks, setFullStocks }) => {
   ));
 
   useEffect(() => {
-    setFilteredStocks(fullStocks)
-  }, [fullStocks])
+    setFilteredStocks(fullStocks);
+  }, [fullStocks]);
 
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 500);
     };
 
-    handleResize(); 
+    handleResize();
     window.addEventListener("resize", handleResize);
 
     return () => {

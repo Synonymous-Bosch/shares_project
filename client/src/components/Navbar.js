@@ -8,7 +8,7 @@ import { faWallet } from "@fortawesome/free-solid-svg-icons";
 import { faListUl } from "@fortawesome/free-solid-svg-icons";
 
 const Nav = styled.nav`
-background-color: black;
+  background-color: black;
   color: #fff;
   flex-direction: column;
   padding: 10px;
@@ -29,13 +29,12 @@ background-color: black;
 `;
 
 const NavMenu = styled.ul`
- display: flex;
+  display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   list-style-type: none;
   padding-left: 0%;
-
 
   @media (max-width: 500px) {
     display: ${({ $isopen }) => ($isopen ? "flex" : "none")};
@@ -147,7 +146,7 @@ const LogoImage = styled.img`
   justify-content: center;
   align-items: center;
   position: absolute;
-  bottom: 10px; 
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
 
@@ -163,7 +162,7 @@ const IconText = styled.span`
   left: 50%;
   transform: translateX(-50%);
   font-size: 2px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
 `;
 
 const IconContainer = styled.div`
