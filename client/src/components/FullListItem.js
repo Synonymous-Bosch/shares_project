@@ -52,7 +52,6 @@ const SymbolText = styled(Link)`
   transition: all 0.5s;
   font-family: Tahoma;
 
-
   &:hover {
     color: grey;
     transform: scale(1.5);

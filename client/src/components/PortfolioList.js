@@ -60,17 +60,23 @@ const Stack = styled.div`
 `;
 
 const Piechart = styled.div`
-justify-content: center;
-display: flex;
-z-index: -1;
-`
+  display: flex;
+  margin-left: 32%;
+  z-index: -1;
+  border: 1.5px solid darkgray;
+  width: fit-content;
+`;
 const PortfolioListWrapper = styled(ListContainer)``;
 
 const PortfolioList = ({ portfolio, handleDelete }) => {
   const [chartData, setChartData] = useState([]);
 
   const portfolioNodes = portfolio.map((portfolioItem) => (
-    <PortfolioItem key={portfolioItem.id} share={portfolioItem} handleDelete={handleDelete} />
+    <PortfolioItem
+      key={portfolioItem.id}
+      share={portfolioItem}
+      handleDelete={handleDelete}
+    />
   ));
 
   useEffect(() => {
@@ -112,8 +118,8 @@ const PortfolioList = ({ portfolio, handleDelete }) => {
       <Piechart>
         <Chart
           chartType="PieChart"
-          width="600px"
-          height="600px"
+          width="400px"
+          height="400px"
           data={chartData}
           options={options}
         />

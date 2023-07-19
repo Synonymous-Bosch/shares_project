@@ -6,76 +6,49 @@ import { Chart } from "react-google-charts";
 const finnhub = require("finnhub");
 
 const ContentContainer = styled.div`
-  flex: 1;
-  padding: 10px;
-  margin-left: 30px;
-
-  @media (max-width: 500px) {
-    margin-left: 0;
-    align-items: center;
-    justify-content: center;
-  }
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin-top: 90px;
 `;
 
 const TopRowContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
-  width: 100%;
+  width: 50%;
+
+  p {
+    background-color: black;
+    height: 35px;
+    border-radius: 40px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    color: white;
+    width: 400px;
+  }
 
   h1 {
-    margin-right: 10px;
-
-    @media (max-width: 500px) {
-      font-size: 22px;
-    }
+    font-size: 25px;
+    margin-top: 0%;
+    margin-bottom: 0%;
   }
 
   h4 {
-    margin-right: 10px;
-    @media (max-width: 500px) {
-      font-size: 15px;
-    }
-  }
-
-  @media (max-width: 500px) {
-    width: 100%;
-    display: contents;
+    margin-top: 0%;
+    font-size: 20px;
   }
 `;
 
 const Logo = styled.div`
-  margin-left: 50px;
-
-  @media (max-width: 500px) {
-    margin: 0;
-  }
+  margin-bottom: 40px;
 `;
 
 const RowContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
-  width: 100%;
-
-  @media (max-width: 500px) {
-    width: 100%;
-    display: contents;
-  }
-
-  select {
-    margin-right: 10px;
-    width: 300px;
-    border-radius: 50px;
-    border-width: 2px;
-    text-align: center;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-
-    @media (max-width: 500px) {
-      margin-top: 10px;
-      width: 360px;
-    }
-  }
 `;
 
 const Label = styled.input`
@@ -84,28 +57,99 @@ const Label = styled.input`
   text-align: center;
   margin-right: 10px;
   border-width: 2px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s;
 
-  @media (max-width: 500px) {
-    margin-top: 10px;
-    width: 170px;
+  &:hover {
+    transform: scale(1.1);
   }
 `;
 
 const Button = styled.input`
   border-radius: 50px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #cfcfcf;
-  color: black;
+  border-style: none;
+  background-color: #000;
+  color: white;
+  transition: all 0.5s;
 
-  @media (max-width: 500px) {
-    width: 170px;
+  &:hover {
+    transform: scale(1.2);
   }
 `;
 
 const CompanyLogo = styled.img`
-  max-width: 100px;
+  width: 100px;
 `;
+
+const ChartDiv = styled.div`
+  width: 50%;
+  text-align: center;
+
+  select {
+    margin-top: 20px;
+    border-style: none;
+    border-radius: 50px;
+    border-width: 2px;
+    width: 300px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-stretch: expanded;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.5s;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+`;
+
+const Popup = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
+const PopupContent = styled.div`
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  width: 600px;
+  text-align: center;
+  border-radius: 80px;
+`;
+
+const PopupMessage = styled.p`
+  font-size: 18px;
+  margin-bottom: 20px;
+`;
+
+const CloseButton = styled.button`
+  background-color: #000;
+  border-radius: 30px;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  font-family: "Proxima Nova", Arial, Helvetica, sans-serif;
+  cursor: pointer;
+  transition: all 0.5s;
+
+  &:hover {
+    background-color: grey;
+    transform: scale(1.2);
+    color: black;
+    font-weight: bold;
+  }
+`;
+
+const TextItems = styled.div `
+  margin-top: 40px;
+`
 
 const ShareDetails = ({ handlePortfolioSubmit }) => {
   const api_auth = finnhub.ApiClient.instance.authentications["api_key"];
@@ -118,6 +162,7 @@ const ShareDetails = ({ handlePortfolioSubmit }) => {
   const [companyProfile, setCompanyProfile] = useState([]);
   const [numberOfShares, setNumberOfShares] = useState(0);
   const [chartData, setChartData] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
 
   const { id } = useParams();
   const timeNow = Math.floor(new Date().getTime() / 1000).toFixed(0);
@@ -203,15 +248,21 @@ const ShareDetails = ({ handlePortfolioSubmit }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setShowPopup(true);
+
     handlePortfolioSubmit({
       symbol: id,
       name: companyProfile.name,
       numberOfShares: numberOfShares,
     });
-    window.location.replace("http://localhost:3000/portfolio");
   };
 
   const options = { hAxis: { ticks: [30, 60, 90, 120, 150] } };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    window.location.replace("http://localhost:3000/portfolio");
+  };
 
   return (
     <ContentContainer>
@@ -221,9 +272,20 @@ const ShareDetails = ({ handlePortfolioSubmit }) => {
         <Logo>
           <CompanyLogo src={companyProfile.logo} alt="Company Logo" />
         </Logo>
+        <RowContainer>
+          <form onChange={handleChange} onSubmit={handleSubmit}>
+            <Label type="number" placeholder="No. of Shares" />
+            <Button type="submit" value="Buy" />
+          </form>
+        </RowContainer>
+        <TextItems>
+          <p>IPO: {formattedDate}</p>
+          <p>Market Capitalisation: {companyProfile.marketCapitalization}</p>
+          <p>Outstanding share: {companyProfile.shareOutstanding}</p>
+        </TextItems>
       </TopRowContainer>
 
-      <RowContainer>
+      <ChartDiv>
         <select onChange={handleSelect} defaultValue="week">
           <option value="week">1 Week</option>
           <option value="month">1 Month</option>
@@ -231,13 +293,6 @@ const ShareDetails = ({ handlePortfolioSubmit }) => {
           <option value="6month">6 Months</option>
           <option value="year">1 Year</option>
         </select>
-        <form onChange={handleChange} onSubmit={handleSubmit}>
-          <Label type="number" placeholder="No. of Shares" />
-          <Button type="submit" value="Buy" />
-        </form>
-      </RowContainer>
-
-      <div>
         {chartData.length > 0 ? (
           <Chart
             chartType="LineChart"
@@ -247,11 +302,18 @@ const ShareDetails = ({ handlePortfolioSubmit }) => {
             data={chartData}
           />
         ) : null}
-      </div>
-
-      <p>IPO: {formattedDate}</p>
-      <p>Market Capitalisation: {companyProfile.marketCapitalization}</p>
-      <p>Outstanding share: {companyProfile.shareOutstanding}</p>
+      </ChartDiv>
+      {showPopup && (
+        <Popup>
+          <PopupContent>
+            <PopupMessage>
+              Congratulations, you have successfully bought {numberOfShares}{" "}
+              from {companyProfile.name}
+            </PopupMessage>
+            <CloseButton onClick={handleClosePopup}>Close</CloseButton>
+          </PopupContent>
+        </Popup>
+      )}
     </ContentContainer>
   );
 };
