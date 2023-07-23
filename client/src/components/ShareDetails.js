@@ -308,7 +308,7 @@ const ShareDetails = ({ handlePortfolioSubmit }) => {
           <PopupContent>
             <PopupMessage>
               Congratulations, you have successfully bought {numberOfShares}{" "}
-              from {companyProfile.name}
+               shares from {companyProfile.name}
             </PopupMessage>
             <CloseButton onClick={handleClosePopup}>Close</CloseButton>
           </PopupContent>
