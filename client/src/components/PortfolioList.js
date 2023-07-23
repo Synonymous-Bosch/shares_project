@@ -65,6 +65,10 @@ const Piechart = styled.div`
   z-index: -1;
   border: 1.5px solid darkgray;
   width: fit-content;
+
+  @media (max-width: 500px) {
+    margin-left: 30px;
+  }
 `;
 const PortfolioListWrapper = styled(ListContainer)``;
 
